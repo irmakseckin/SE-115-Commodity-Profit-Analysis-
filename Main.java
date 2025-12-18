@@ -268,7 +268,7 @@ public class Main {
             int monthTotal = 0;
 
             // Sum daily profits of the given commodity for the current month
-            for (int d = 0; d < DAYS; d++) {
+            for (int d = 0; d < DAYS; d++) 
                 monthTotal += profitData[m][d][commIndex];
             }
 
@@ -336,16 +336,85 @@ public class Main {
     }
 
 
-    // 7
+  // 7
     public static int daysAboveThreshold(String comm, int threshold) {
-        return 1234;
+
+        // Find the index of the given commodity
+        int commIndex = -1;
+        for (int c = 0; c < COMMS; c++) {
+            if (commodities[c].equals(comm)) {
+                commIndex = c;
+                break;
+            }
+        }
+
+        // If the commodity is invalid, return error value
+        if (commIndex == -1) {
+            return -1;
+        }
+
+        // Counter for days above the threshold
+        int count = 0;
+
+        // Loop through all months
+        for (int m = 0; m < MONTHS; m++) {
+
+            // Loop through all days of the month
+            for (int d = 0; d < DAYS; d++) {
+
+                // Check if profit exceeds the threshold
+                if (profitData[m][d][commIndex] > threshold) {
+                    count++;
+                }
+            }
+        }
+
+        // Return the total count
+        return count;
     }
 
-    // 8
+// 8
     public static int biggestDailySwing(int month) {
-        return 1234;
-    }
 
+
+        // Check if the month value is invalid
+        if (month < 0 || month >= MONTHS) {
+            return -99999;
+        }
+
+        // Stores the maximum swing value found
+        int maxSwing = 0;
+
+        // Loop through days (up to the second last day)
+        for (int d = 0; d < DAYS - 1; d++) {
+
+            // Total profit of the current day
+            int day1Total = 0;
+
+            // Total profit of the next day
+            int day2Total = 0;
+
+            // Sum profits of all commodities for both days
+            for (int c = 0; c < COMMS; c++) {
+                day1Total += profitData[month][d][c];
+                day2Total += profitData[month][d + 1][c];
+            }
+
+            // Calculate the absolute difference between two days
+            int swing = day2Total - day1Total;
+            if (swing < 0) {
+                swing = -swing;
+            }
+
+            // Update max swing if a larger value is found
+            if (swing > maxSwing) {
+                maxSwing = swing;
+            }
+        }
+
+        // Return the biggest daily swing in the month
+        return maxSwing;
+    }
     // 9
     public static String compareTwoCommodities(String c1, String c2) {
         return "DUMMY is better by 1234";
@@ -361,3 +430,4 @@ public class Main {
         System.out.println("Data loaded – ready for queries");
     }
 }
+
