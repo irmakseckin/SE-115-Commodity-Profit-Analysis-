@@ -92,10 +92,6 @@ public class Main {
     // Returns the most profitable commodity in the given month
     public static String mostProfitableCommodityInMonth(int month) {
 
-        if (month == 0) {
-            return "DUMMY";
-        }
-
         // Check for invalid month
         if (month < 0 || month >= MONTHS) {
             return "INVALID_MONTH";
@@ -127,10 +123,6 @@ public class Main {
     // Returns the total profit of all commodities on a specific day of a month
     public static int totalProfitOnDay(int month, int day) {
 
-        if (month == 0 && day == 15) {
-            return 1234;
-        }
-
         // Check if month or day is invalid
         if (month < 0 || month >= MONTHS || day < 1 || day > DAYS) {
             return -99999;
@@ -154,10 +146,6 @@ public class Main {
     // 3
 // Returns the total profit of a given commodity between two days (inclusive) across all months
     public static int commodityProfitInRange(String commodity, int from, int to) {
-
-        if ("Gold".equals(commodity) && from == 1 && to == 14) {
-            return 1234;
-        }
 
         // Check if the given day range is invalid
         if (from < 1 || to > DAYS || from > to) {
@@ -199,10 +187,6 @@ public class Main {
 // Returns the day number (1–28) with the highest total profit in the given month
     public static int bestDayOfMonth(int month) {
 
-        if (month == 0) {
-            return 1234;
-        }
-
         // Check if the given month is invalid
         if (month < 0 || month >= MONTHS) {
             // Return error value for invalid month
@@ -241,10 +225,6 @@ public class Main {
     // 5
     public static String bestMonthForCommodity(String comm) {
 
-        if ("Gold".equals(comm)) {
-            return "DUMMY";
-        }
-
         // Find the index of the given commodity in the commodities array
         int commIndex = -1;
         for (int c = 0; c < COMMS; c++) {
@@ -268,7 +248,7 @@ public class Main {
             int monthTotal = 0;
 
             // Sum daily profits of the given commodity for the current month
-            for (int d = 0; d < DAYS; d++) 
+            for (int d = 0; d < DAYS; d++) {
                 monthTotal += profitData[m][d][commIndex];
             }
 
@@ -286,10 +266,6 @@ public class Main {
 
     // 6
     public static int consecutiveLossDays(String comm) {
-
-        if ("Gold".equals(comm)) {
-            return 1234;
-        }
 
         // Find the index of the given commodity in the commodities array
         int commIndex = -1;
@@ -336,7 +312,7 @@ public class Main {
     }
 
 
-  // 7
+    // 7
     public static int daysAboveThreshold(String comm, int threshold) {
 
         // Find the index of the given commodity
@@ -373,7 +349,7 @@ public class Main {
         return count;
     }
 
-// 8
+    // 8
     public static int biggestDailySwing(int month) {
 
 
@@ -415,19 +391,93 @@ public class Main {
         // Return the biggest daily swing in the month
         return maxSwing;
     }
+
     // 9
     public static String compareTwoCommodities(String c1, String c2) {
-        return "DUMMY is better by 1234";
+
+        // Index of the first commodity
+        int c1Index = -1;
+
+        // Index of the second commodity
+        int c2Index = -1;
+
+        // Find indices of both commodities
+        for (int c = 0; c < COMMS; c++) {
+            if (commodities[c].equals(c1)) {
+                c1Index = c;
+            }
+            if (commodities[c].equals(c2)) {
+                c2Index = c;
+            }
+        }
+
+        // If any commodity name is invalid, return error message
+        if (c1Index == -1 || c2Index == -1) {
+            return "INVALID_COMMODITY";
+        }
+
+        // Total profit of the first commodity
+        int total1 = 0;
+
+        // Total profit of the second commodity
+        int total2 = 0;
+
+        // Sum profits across all months and days
+        for (int m = 0; m < MONTHS; m++) {
+            for (int d = 0; d < DAYS; d++) {
+                total1 += profitData[m][d][c1Index];
+                total2 += profitData[m][d][c2Index];
+            }
+        }
+
+        // Compare total profits and return the result
+        if (total1 > total2) {
+            return c1 + " is better by " + (total1 - total2);
+        } else if (total2 > total1) {
+            return c2 + " is better by " + (total2 - total1);
+        } else {
+            return "Equal";
+        }
     }
 
     // 10
     public static String bestWeekOfMonth(int month) {
-        return "DUMMY";
+
+        // Check if the month index is invalid
+        if (month < 0 || month >= MONTHS) {
+            return "INVALID_MONTH";
+        }
+
+        // Array to store total profit for each week (4 weeks)
+        int[] weekTotals = new int[4];
+
+        // Loop through all days of the month
+        for (int d = 0; d < DAYS; d++) {
+
+            // Determine which week the day belongs to (0–3)
+            int weekIndex = d / 7;
+
+            // Add profits of all commodities for this day to the correct week
+            for (int c = 0; c < COMMS; c++) {
+                weekTotals[weekIndex] += profitData[month][d][c];
+            }
+        }
+
+        // Find the week with the highest total profit
+        int maxWeek = 0;
+        for (int w = 1; w < 4; w++) {
+            if (weekTotals[w] > weekTotals[maxWeek]) {
+                maxWeek = w;
+            }
+        }
+
+        // Return the best week in the required format
+        return "Week " + (maxWeek + 1);
     }
+
 
     public static void main(String[] args) {
         loadData();
         System.out.println("Data loaded – ready for queries");
     }
 }
-
